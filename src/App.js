@@ -42,7 +42,4 @@ const App = () => {
 };
 
 export default App;
-        </AppProvider>
-    );
-};
-export default App;
+    
