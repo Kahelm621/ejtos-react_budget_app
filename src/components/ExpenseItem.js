@@ -1,36 +1,60 @@
 import React, { useContext } from 'react';
+import { FaPlusCircle, FaMinusCircle } from 'react-icons/fa';
 import { TiDelete } from 'react-icons/ti';
 import { AppContext } from '../context/AppContext';
 
 const ExpenseItem = (props) => {
-    const { dispatch } = useContext(AppContext);
+    const { currency, dispatch } = useContext(AppContext);
 
     const handleDeleteExpense = () => {
         dispatch({
             type: 'DELETE_EXPENSE',
-            payload: props.id,
+            payload: { id: props.id },
+        });
+    };
+
+    const modifyExpense = (name, actionType) => {
+        const expense = {
+            id: props.id,
+            name: name,
+            cost: 10, // Modify this value as needed
+        };
+
+        dispatch({
+            type: actionType,
+            payload: expense,
         });
     };
 
     const increaseAllocation = (name) => {
-        const expense = {
-            name: name,
-            cost: 10,
-        };
+        modifyExpense(name, 'ADD_EXPENSE');
+    };
 
-        dispatch({
-            type: 'ADD_EXPENSE',
-            payload: expense
-        });
-
-    }
+    const decreaseAllocation = (name) => {
+        modifyExpense(name, 'RED_EXPENSE');
+    };
 
     return (
         <tr>
-        <td>{props.name}</td>
-        <td>£{props.cost}</td>
-        <td><button onClick={event=> increaseAllocation(props.name)}>+</button></td>
-        <td><TiDelete size='1.5em' onClick={handleDeleteExpense}></TiDelete></td>
+            <td className="col">{props.name}</td>
+            <td className="col">{currency}{props.cost}</td>
+            <td className="col">
+                <FaPlusCircle
+                    size='1.2em'
+                    color="#4ead5c"
+                    onClick={() => increaseAllocation(props.name)}
+                />
+            </td>
+            <td className="col">
+                <FaMinusCircle
+                    size='1.2em'
+                    color="#af1e11"
+                    onClick={() => decreaseAllocation(props.name)}
+                />
+            </td>
+            <td className="col">
+                <TiDelete size='1.5em' onClick={handleDeleteExpense} />
+            </td>
         </tr>
     );
 };
